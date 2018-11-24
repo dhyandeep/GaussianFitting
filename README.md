@@ -1,7 +1,7 @@
 # GaussianFitting
 GaussianFitting
 
-##Getting Started
+## Getting Started
 
 Use  this code with visual studio 2017 (set c++11 features enabled). copy the entire folder to your local system and open the .vcxproj file with visual studio. copy the dataset files "scans.csv" and "retention_time.csv" to the same folder. 
 
@@ -17,13 +17,13 @@ lower and upper bounds for the maximum peak will be printed
 
 it will print the coefficients of the gaussian which will fit this curve approximately.
 
-##Built With
+## Built With
 
 Visual studio 2017
 
 VC++ version 14.13
 
-##Algorithms used
+## Algorithms used
 
 Gaussian approximation of curve : caruana's algorithm  https://www.researchgate.net/publication/252062037_A_Simple_Algorithm_for_Fitting_a_Gaussian_Function_DSP_Tips_and_Tricks
 
