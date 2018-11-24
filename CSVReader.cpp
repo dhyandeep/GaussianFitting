@@ -29,8 +29,6 @@ float arr2[2000] = { 0 };
 float retent = 0;
 void CSVReader::ReadCSV(int flag, ScanData obj[], int size)
 {
-	//open file1 
-	//open file2
 	char c;
 	float mbyz, intensity;
 	string input,inputRetention;
@@ -43,7 +41,10 @@ void CSVReader::ReadCSV(int flag, ScanData obj[], int size)
 		inputRetention.clear();
 		getline(m_MZIFile, input);
 		getline(m_RetentionFile, inputRetention);
-		obj[row].retentionTime = inputRetention;
+		stringstream ssRet(inputRetention);
+		float fRetentionInput;
+		ssRet >> c >> c >> fRetentionInput>>c;
+		obj[row].retentionTime = fRetentionInput;
 		if(! input.empty())
 		{
 			stringstream ss(input);
@@ -55,8 +56,6 @@ void CSVReader::ReadCSV(int flag, ScanData obj[], int size)
 					++g_count;
 					ss >> c >> arr1[g_count] >> c >> arr2[g_count]; ;
 				}
-
-				//cout << row << c << g_count << endl;
 
 				obj[row].mbyz = new float[g_count + 1];
 				memcpy(obj[row].mbyz, arr1, (g_count + 1) * sizeof(float));

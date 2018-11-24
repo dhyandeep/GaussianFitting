@@ -116,10 +116,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CMatrix.h" />
     <ClInclude Include="CSVReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientApp.cpp" />
+    <ClCompile Include="CMatrix.cpp" />
     <ClCompile Include="CSVReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

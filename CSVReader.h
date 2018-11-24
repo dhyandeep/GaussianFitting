@@ -16,7 +16,7 @@ struct Point
 struct ScanData
 {
 	
-	string retentionTime;
+	float retentionTime;
 	//map<float, float> MByZvsIntensity;
 	int rowsize;
 	float* mbyz;

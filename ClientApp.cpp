@@ -1,5 +1,6 @@
 #include "CSVReader.h"
 #include <algorithm>
+#include "CMatrix.h"
 void PrintScanAt(ScanData* data, int scanNo)
 {
 	if (data)
@@ -14,6 +15,7 @@ void PrintScanAt(ScanData* data, int scanNo)
 
 void GetIntensityAndRetentionForMbyZRange(ScanData* data, float lower, float upper, vector<Point>& peaksInRange, vector<Point>& IAndScanNo )
 {
+	cout << "**********Retention and Intensity for range " << lower << " to " << upper << "**********" << endl;
 	cout << "Retention     " << "intensity" << endl;
 	
 	int ThresholdIntensityCounter = 0;
@@ -26,11 +28,10 @@ void GetIntensityAndRetentionForMbyZRange(ScanData* data, float lower, float upp
 				if (data[sCounter].intensity[j] > IntensityThreshold)
 				{
 					ThresholdIntensityCounter++;
-					//peaks.push_back(new Peak{ sCounter, data[sCounter].intensity[j] });
 					peaksInRange.push_back(Point{ sCounter, data[sCounter].intensity[j] });
 				}
 				IAndScanNo.push_back(Point{ sCounter, data[sCounter].intensity[j] });
-				cout << data[sCounter].retentionTime.c_str() <<"    "<<data[sCounter].intensity[j] << endl;
+				cout << data[sCounter].retentionTime <<"    "<<data[sCounter].intensity[j] << endl;
 			}
 		}
 	}
@@ -64,20 +65,56 @@ pair<Point,Point>& FindLowerAndUpper(Point& GlobalPeak, vector<Point>& DataSet)
 
 	return bounds;
 }
+void FitGaussian(pair<Point, Point>& resultBounds, vector<Point>& Intensities, ScanData* DataSet)
+{
+	double* xArr = (double*)malloc(Intensities.size()*sizeof(double));
+	double* logyArr = (double*)malloc(Intensities.size()*sizeof(double));
+	int iter = 0;
+	for (auto i : Intensities)
+	{
+		xArr[iter] = i.intensity;
+		logyArr[iter] = log(DataSet[i.scanNo].retentionTime);
+		iter++;
+	}
+	vector<vector<double>> augMatrix;
+	FindParameters(xArr, logyArr, iter, augMatrix);
+	vector<double> result = gaussElimination(augMatrix);
+	
+	cout << "a, b, c values:" << endl;
+	for (auto i : result)
+	{
+		cout << i << "\t";
+	}
+	cout << endl;
+	
+	double mu = -result[1] / (2 * result[2]);						// mu = -b/(2*c);
+	double sigma = sqrt(-1 / (2*result[2]));						// sigma = sqrt(-1/(2*c))
+	double temp = result[0] - pow(result[1], 2) / (4 * result[2]);	//(a-((b^2)/4*c)
+	double A = pow(2.71828, temp);									//e^(a-((b^2)/4*c))
+
+	cout << "******************Gaussian Fitting ****************"<<endl;
+	cout << "Mu = " << mu << endl;
+	cout << "Sigma = " << sigma << endl;
+	cout << "A = " << A << endl;
+}
 int main()
 {
 	try
 	{
 		CSVReader CReader("scans.csv", "retention_time.csv");
 		ScanData DataSet[ScanCount];
-
+		cout << "Reading from CSV files, please wait..." << endl;
 		CReader.ReadCSV(0, DataSet, ScanCount);
-		PrintScanAt(DataSet,610);
+		cout << "Input scan number" << endl;;
+		int inputNo;
+		cin >> inputNo;
+		cout << "******printing values at scan number****" << inputNo<<endl;
+		PrintScanAt(DataSet, inputNo);
 		vector<Point> resultPeaks;
 		vector<Point> resultIntensities;
 		GetIntensityAndRetentionForMbyZRange(DataSet, 128.0340, 128.0366, resultPeaks, resultIntensities);
 		cout << "**********peaks**********" << endl;
-		cout << "Intensity   " << "Retention" << endl;
+		cout << "Intensity  " << "Retention" << endl;
 		Point max;
 		max.intensity = resultPeaks[0].intensity;
 		max.scanNo = 0;
@@ -88,16 +125,15 @@ int main()
 				max.intensity = i.intensity;
 				max.scanNo = i.scanNo;
 			}
-			cout << i.intensity << " " << DataSet[i.scanNo].retentionTime.c_str()<<endl;
+			cout << i.intensity << "\t" << DataSet[i.scanNo].retentionTime <<endl;
 		}
 
-		//vector<Point> resultIntensities1{ {1,1488}, {2,15}, {3, 20}, {4,80},/*4,8 should hit*/ {5,90}, {6,100}, {7,100}, {8,101}, {9,110}, \
-		//{10, 110}, { 11, 150 }, { 12, 152 }, { 13, 150 }, { 14, 150 }, { 15, 140 }, { 16, 102 }, { 17, 20 }, { 18, 16 },/*should hit*/{ 19,15 }, \
-		//{ 20,222 } };
-		//Point max1{12,152 };
 		pair<Point, Point> resultBounds = FindLowerAndUpper(max, resultIntensities);
-		//pair<Point, Point> resultBounds = FindLowerAndUpper(max1, resultIntensities1);
-		cout << "Lower Bound = " << resultBounds.first.intensity << "UpperBound = " << resultBounds.second.intensity;
+
+		cout << "************* Upper and Lower Bounds ************" << endl;
+		cout << "upper Bound = " << resultBounds.first.intensity << " lowerBound = " << resultBounds.second.intensity<<endl;
+		FitGaussian(resultBounds, resultIntensities, DataSet);
+		
 	}
 	catch (...)
 	{
