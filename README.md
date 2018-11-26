@@ -1,5 +1,5 @@
 # GaussianFitting
-GaussianFitting
+
 
 ## Getting Started
 
@@ -7,15 +7,17 @@ Use  this code with visual studio 2017 (set c++11 features enabled). copy the en
 
 Build the project with visual studio and run the same.
 
-Wait for several minutes for reading the dataset. Then input the scan number to display table of intensity and m/z table. 
+Wait for several minutes for reading the dataset. Then input the scan number to display table of intensity and m/z. 
 
-After this, it will print the table for Intensity and retention for the range between the given limit of m/z.
+It will output the following
 
-and the peak values above 10e4 will be printed,
+1. it will print the table for Intensity and retention for the range between the given limit of m/z.
 
-lower and upper bounds for the maximum peak will be printed
+2. it will print the peak values above 10e4,
 
-it will print the coefficients of the gaussian which will fit this curve approximately.
+3. lower and upper bounds for the maximum peak will be printed.
+
+4. it will print the coefficients of the gaussian which will fit this curve approximately.
 
 ## Built With
 
