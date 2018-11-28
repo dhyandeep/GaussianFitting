@@ -1,5 +1,6 @@
 #include "CSVReader.h"
 #include <algorithm>
+#include  <cmath>
 #include "CMatrix.h"
 void PrintScanAt(ScanData* data, int scanNo)
 {
@@ -38,7 +39,7 @@ void GetIntensityAndRetentionForMbyZRange(ScanData* data, float lower, float upp
 	cout << "ThresholdIntensityCounter " << ThresholdIntensityCounter << endl;
 	
 }
-pair<Point,Point>& FindLowerAndUpper(Point& GlobalPeak, vector<Point>& DataSet)
+pair<Point,Point> FindLowerAndUpper(Point& GlobalPeak, vector<Point>& DataSet)
 {
 	//calculation of lower bound
 

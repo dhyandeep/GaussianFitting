@@ -1,6 +1,7 @@
 #include "CSVReader.h"
 #include <string>
 #include <sstream>
+#include <cstring>
 using namespace std;
 CSVReader::CSVReader():m_MZIFileName("scans.csv"), m_RetentionFileName("retention_time.csv")
 {
@@ -9,7 +10,7 @@ CSVReader::CSVReader():m_MZIFileName("scans.csv"), m_RetentionFileName("retentio
 	if ((!m_MZIFile) || (!m_RetentionFile))
 	{
 		cout << __FUNCTION__ << " m_FileInStream.open() failed" << endl;
-		throw(new exception("Error creating file"));
+		throw std::runtime_error("Unable to open file");
 	}
 }
 CSVReader::CSVReader(string fName1,string fName2):m_MZIFileName(fName1), m_RetentionFileName(fName2)
@@ -19,7 +20,7 @@ CSVReader::CSVReader(string fName1,string fName2):m_MZIFileName(fName1), m_Reten
 	if ((!m_MZIFile) || (!m_RetentionFile))
 	{
 		cout << __FUNCTION__ << " m_FileInStream.open() failed" << endl;
-		throw(new exception("Error creating file"));
+		throw std::runtime_error("Unable to open file");
 	}
 }
 
