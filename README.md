@@ -3,7 +3,7 @@
 
 ## Getting Started
 
-Use  this code with visual studio 2017 (set c++11 features enabled). copy the entire folder to your local system and open the .vcxproj file with visual studio. copy the dataset files "scans.csv" and "retention_time.csv" to the same folder. 
+Build the code from a folder. copy the dataset files "scans.csv" and "retention_time.csv" to the same folder. 
 
 Build the project with visual studio and run the same.
 
